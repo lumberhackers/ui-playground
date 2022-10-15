@@ -1,7 +1,6 @@
 import HomeVue from "./views/Home.vue";
-import BeamWidgetVue from "./views/BeamWidget.vue";
 import BeamMobileVue from "./views/BeamMobile.vue";
-
+import ModalVue from "./views/Modal.vue";
 export const routes = [
   {
     path: "/",
@@ -9,7 +8,7 @@ export const routes = [
   },
   {
     path: "/beam-widget",
-    component: BeamWidgetVue,
+    component: ModalVue,
   },
   {
     path: "/beam-mobile",

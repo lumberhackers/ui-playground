@@ -22,6 +22,8 @@ export const mount = (element: Element) => {
 
   if (yankStyle) {
     shadowRoot.appendChild(yankStyle.cloneNode(true));
+  } else {
+    console.error("did not find style to yank into shadow dom");
   }
   //
 
