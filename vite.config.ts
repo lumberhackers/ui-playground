@@ -2,10 +2,12 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { builtinModules } from "module";
 import path from "path";
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
+import { CSS_KEY } from "./src/const";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), cssInjectedByJsPlugin({ styleId: CSS_KEY })],
   build: {
     sourcemap: true,
     rollupOptions: {
@@ -13,7 +15,7 @@ export default defineConfig({
     },
     lib: {
       name: "mfe-beam",
-      entry: path.resolve(__dirname, "src/main.ts"),
+      entry: path.resolve(__dirname, "src/lib.ts"),
       formats: ["es"],
     },
   },

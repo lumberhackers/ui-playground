@@ -5,11 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && vite build && scripts/fix-process-env.sh",
     "preview": "vite preview",
     "serve:dist": "npx http-server --cors --ssl -C certs/localhost.pem -K certs/localhost-key.pem dist"
   },
   "dependencies": {
+    "@vueuse/core": "^9.3.0",
+    "vite-plugin-css-injected-by-js": "^2.1.0",
     "vue": "^3.2.37",
     "vue-router": "4",
     "webcam-easy": "^1.0.5"
