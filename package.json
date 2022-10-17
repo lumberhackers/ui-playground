@@ -12,6 +12,7 @@
   "dependencies": {
     "@microsoft/signalr": "^6.0.10",
     "@vueuse/core": "^9.3.0",
+    "qrcode": "^1.5.1",
     "uuid": "^9.0.0",
     "vite-plugin-css-injected-by-js": "^2.1.0",
     "vue": "^3.2.37",

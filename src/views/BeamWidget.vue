@@ -24,6 +24,8 @@ setTimeout(() => {
 
     <img class="qr" src="/qr.svg" alt="Example QR Code" />
 
+    <canvas id="canvas"></canvas>
+    
     <h2>useBeamSession (debug)</h2>
     <table>
       <tr>

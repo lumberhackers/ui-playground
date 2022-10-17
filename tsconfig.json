@@ -19,6 +19,6 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "src/*.d.ts"
-  ],
+, "src/scanQRCode.js", "src/scanQRCode.js"  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
