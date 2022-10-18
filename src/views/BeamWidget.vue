@@ -3,7 +3,7 @@ import { useEventBus } from "@vueuse/core";
 import { examplePdf } from "../pdf";
 import { useBeamSession } from "../features/useBeamSession";
 import { createQRCode } from "../scanQRCode";
-import {onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { reactive } from "vue";
 import HelloWorld from "../components/HelloWorld.vue";
 
