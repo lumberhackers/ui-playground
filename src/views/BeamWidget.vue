@@ -4,6 +4,8 @@ import { examplePdf } from "../pdf";
 import { useBeamSession } from "../features/useBeamSession";
 import { createQRCode } from "../scanQRCode";
 import {onMounted } from 'vue'
+import { reactive } from "vue";
+import HelloWorld from "../components/HelloWorld.vue";
 
 const { isConnected, photos, sessionId } = useBeamSession();
 
@@ -16,6 +18,9 @@ setTimeout(() => {
 onMounted(() => {
   createQRCode(sessionId.value)
 })
+
+const entry = reactive({ photo: "lol Im the photo", title: "" });
+
 </script>
 
 <template>
@@ -28,6 +33,10 @@ onMounted(() => {
       The integrating app will use this widget to communicate with the
       microservice.
     </div>
+    <hr />
+    <HelloWorld :entry="entry" />
+    {{ entry.title }}
+    <hr />
 
     <!-- <img class="qr" src="/qr.svg" alt="Example QR Code" /> -->
 

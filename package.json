@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build && scripts/fix-process-env.sh",
+    "build": "yarn build:site && yarn build:mfe",
+    "build:site": "vue-tsc --noEmit && vite build",
+    "build:mfe": "vue-tsc --noEmit && BUILD_MFE=1 vite build && scripts/fix-process-env.sh",
     "preview": "vite preview",
     "serve:dist": "http-server --cors -p 5173 --ssl -C certs/localhost.pem -K certs/localhost-key.pem dist"
   },
