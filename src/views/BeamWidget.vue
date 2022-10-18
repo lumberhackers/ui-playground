@@ -2,8 +2,10 @@
 import { useEventBus } from "@vueuse/core";
 import { examplePdf } from "../pdf";
 import { useBeamSession } from "../features/useBeamSession";
-import HelloWorld from "../components/HelloWorld.vue";
+import { createQRCode } from "../scanQRCode";
+import { onMounted } from 'vue'
 import { reactive } from "vue";
+
 const { isConnected, photos, sessionId } = useBeamSession();
 
 const bus = useEventBus("pdf");
@@ -12,7 +14,12 @@ setTimeout(() => {
   bus.emit({ data: examplePdf });
 }, 1000);
 
+onMounted(() => {
+  createQRCode(sessionId.value)
+})
+
 const entry = reactive({ photo: "lol Im the photo", title: "" });
+
 </script>
 
 <template>
@@ -26,12 +33,13 @@ const entry = reactive({ photo: "lol Im the photo", title: "" });
       microservice.
     </div>
     <hr />
-    <HelloWorld :entry="entry" />
     {{ entry.title }}
     <hr />
 
-    <img class="qr" src="/qr.svg" alt="Example QR Code" />
+    <!-- <img class="qr" src="/qr.svg" alt="Example QR Code" /> -->
 
+    <canvas id="canvas"></canvas>
+    
     <h2>useBeamSession (debug)</h2>
     <table>
       <tr>
