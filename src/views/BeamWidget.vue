@@ -2,6 +2,9 @@
 import { useEventBus } from "@vueuse/core";
 import { examplePdf } from "../pdf";
 import { useBeamSession } from "../features/useBeamSession";
+import { createQRCode } from "../scanQRCode";
+import {onMounted } from 'vue'
+
 const { isConnected, photos, sessionId } = useBeamSession();
 
 const bus = useEventBus("pdf");
@@ -9,6 +12,10 @@ const bus = useEventBus("pdf");
 setTimeout(() => {
   bus.emit({ data: examplePdf });
 }, 1000);
+
+onMounted(() => {
+  createQRCode(sessionId.value)
+})
 </script>
 
 <template>
@@ -22,7 +29,7 @@ setTimeout(() => {
       microservice.
     </div>
 
-    <img class="qr" src="/qr.svg" alt="Example QR Code" />
+    <!-- <img class="qr" src="/qr.svg" alt="Example QR Code" /> -->
 
     <canvas id="canvas"></canvas>
     

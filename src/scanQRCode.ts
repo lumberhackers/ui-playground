@@ -1,9 +1,13 @@
-var QRCode = require('qrcode')
-var canvas = document.getElementById('canvas')
+import QRCode from 'qrcode';
 
-QRCode.toCanvas(canvas, 'sample text', function (error: any) {
-  if (error) console.error(error)
-  console.log('success!');
-})
+export const createQRCode = ( sessionId: string ) => { 
+  var canvas = document.getElementById('canvas')
+  console.log("Test")
+  console.log(JSON.parse(JSON.stringify(canvas)))
 
-export {}
+  QRCode.toCanvas(canvas, sessionId, function (error: any) {
+    if (error) console.error(error)
+    console.log('success!');
+  })
+}
+  
