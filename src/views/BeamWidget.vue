@@ -3,22 +3,25 @@ import { useEventBus } from "@vueuse/core";
 import { examplePdf } from "../pdf";
 import { useBeamSession } from "../features/useBeamSession";
 import { createQRCode } from "../scanQRCode";
-import { onMounted } from "vue";
+import { onMounted, onUpdated, ref } from "vue";
 import { reactive } from "vue";
 
 const { isConnected, photos, sessionId, openSession } = useBeamSession("host");
 
 const bus = useEventBus("pdf");
 
-setTimeout(() => {
+const save = () => {
   bus.emit({ data: examplePdf });
-}, 1000);
+};
+const qrCanvas = ref<any>(null); // this aint showing up in huddle
 
 onMounted(() => {
-  createQRCode(sessionId.value);
+  if (qrCanvas) {
+    createQRCode(qrCanvas.value, sessionId.value);
+  } else {
+    console.error("could not find qr");
+  }
 });
-
-const entry = reactive({ photo: "lol Im the photo", title: "" });
 </script>
 
 <template>
@@ -27,23 +30,14 @@ const entry = reactive({ photo: "lol Im the photo", title: "" });
     href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
   />
   <div class="content">
-    <canvas id="canvas"></canvas>
-
-    <h2>useBeamSession (debug)</h2>
-    <table>
-      <tr>
-        <th>isConnected</th>
-        <td>{{ isConnected }}</td>
-      </tr>
-      <tr>
-        <th>photos</th>
-        <td><img class="thumbnail" v-for="photo in photos" :src="photo" /></td>
-      </tr>
-      <tr>
-        <th>sessionId</th>
-        <td>{{ sessionId }}</td>
-      </tr>
-    </table>
+    <div v-if="photos.length === 0">
+      Scan this with your mobile device<br />
+      <canvas ref="qrCanvas" v-if="photos.length === 0"></canvas>
+    </div>
+    <div v-else>
+      <button @click="save">Save Photo Collection</button>
+      <div><img class="thumbnail" v-for="photo in photos" :src="photo" /></div>
+    </div>
   </div>
 </template>
 
@@ -61,7 +55,7 @@ const entry = reactive({ photo: "lol Im the photo", title: "" });
 }
 .thumbnail {
   padding: 5px;
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
 }
 </style>

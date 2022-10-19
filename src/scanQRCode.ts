@@ -1,14 +1,13 @@
 import QRCode from "qrcode";
+import { BASE_URL } from "./config";
 
-export const createQRCode = (sessionId: string) => {
-  var canvas = document.getElementById("canvas");
-  var url =
-    "https://beamphoto.pagekite.me/spa/index.html#/beam-mobile/" + sessionId;
+export const createQRCode = (el: any, sessionId: string) => {
+  var mfeModuleUrl = BASE_URL + "/spa/index.html#/beam-mobile/" + sessionId;
 
-  QRCode.toCanvas(canvas, url, function (error: any) {
+  QRCode.toCanvas(el, mfeModuleUrl, function (error: any) {
     // if (error) console.error(error)
     // console.log('success!');
   });
 
-  console.log(url);
+  console.log(mfeModuleUrl);
 };

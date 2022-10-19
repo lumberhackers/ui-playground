@@ -1,10 +1,11 @@
 import { HubConnectionBuilder } from "@microsoft/signalr";
+import { BASE_URL } from "../config";
 
 type ReceivePhotoHook = (photoB64: string) => void;
 
 export const connection = new HubConnectionBuilder()
   // TODO; figure out how to parameterize
-  .withUrl("/photos")
+  .withUrl(BASE_URL + "/photos")
   .build();
 
 /**
@@ -26,6 +27,15 @@ export const PhotoHub = {
     // Here is the real signalR handler.
     connection.on("ReceivePhoto", hook);
   },
+};
+
+// fake data
+const _initFakePhotoEmitter = (hook: ReceivePhotoHook) => {
+  setInterval(
+    () =>
+      _urlContentToDataUri("/test_cat_money.jpeg").then((data) => hook(data)),
+    5000
+  );
 };
 
 function _urlContentToDataUri(url: string): Promise<string> {
