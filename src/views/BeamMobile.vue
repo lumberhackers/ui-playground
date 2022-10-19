@@ -38,10 +38,11 @@ const send = async () => {
   sending.value = true;
   try {
     await beamPhoto(photo.value);
+  } catch (e) {
+    alert(
+      "something went wrong.. try closing your tab and reloading before trying again"
+    );
   } finally {
-    await wait();
-
-    alert("something went wrong.. try again");
     sending.value = false;
   }
 
