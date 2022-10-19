@@ -10,6 +10,7 @@ const { BUILD_MFE } = process.env;
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), cssInjectedByJsPlugin({ styleId: CSS_KEY })],
+  base: "/spa",
   build: {
     outDir: BUILD_MFE ? "dist/mfe" : "dist",
     sourcemap: true,

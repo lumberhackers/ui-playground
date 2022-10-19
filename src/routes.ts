@@ -11,7 +11,7 @@ export const routes = [
     component: ModalVue,
   },
   {
-    path: "/beam-mobile",
+    path: "/beam-mobile/:id",
     component: BeamMobileVue,
   },
 ];

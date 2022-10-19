@@ -3,10 +3,10 @@ import { useEventBus } from "@vueuse/core";
 import { examplePdf } from "../pdf";
 import { useBeamSession } from "../features/useBeamSession";
 import { createQRCode } from "../scanQRCode";
-import { onMounted } from 'vue'
+import { onMounted } from "vue";
 import { reactive } from "vue";
 
-const { isConnected, photos, sessionId } = useBeamSession();
+const { isConnected, photos, sessionId, openSession } = useBeamSession("host");
 
 const bus = useEventBus("pdf");
 
@@ -15,11 +15,10 @@ setTimeout(() => {
 }, 1000);
 
 onMounted(() => {
-  createQRCode(sessionId.value)
-})
+  createQRCode(sessionId.value);
+});
 
 const entry = reactive({ photo: "lol Im the photo", title: "" });
-
 </script>
 
 <template>
@@ -28,18 +27,8 @@ const entry = reactive({ photo: "lol Im the photo", title: "" });
     href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
   />
   <div class="content">
-    <div class="content">
-      The integrating app will use this widget to communicate with the
-      microservice.
-    </div>
-    <hr />
-    {{ entry.title }}
-    <hr />
-
-    <!-- <img class="qr" src="/qr.svg" alt="Example QR Code" /> -->
-
     <canvas id="canvas"></canvas>
-    
+
     <h2>useBeamSession (debug)</h2>
     <table>
       <tr>
