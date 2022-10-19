@@ -33,7 +33,10 @@ export const PhotoHub = {
    */
   onReceivePhoto: (hook: ReceivePhotoHook) => {
     // While this isn't implemented, we can fake it.
-    _initFakePhotoEmitter(hook);
+    // _initFakePhotoEmitter(hook);
+    _urlContentToDataUri("/antipode_map.png").then((data) => hook(data)),
+    _urlContentToDataUri("/antipode_map.png").then((data) => hook(data)),
+    _urlContentToDataUri("/antipode_map.png").then((data) => hook(data)),
 
     // Here is the real signalR handler.
     connection.on("ReceivePhoto", hook);
@@ -41,13 +44,13 @@ export const PhotoHub = {
 };
 
 // fake data
-const _initFakePhotoEmitter = (hook: ReceivePhotoHook) => {
-  setInterval(
-    () =>
-      _urlContentToDataUri("/test_cat_money.jpeg").then((data) => hook(data)),
-    5000
-  );
-};
+// const _initFakePhotoEmitter = (hook: ReceivePhotoHook) => {
+//   setInterval(
+//     () =>
+//       _urlContentToDataUri("/test_cat_money.jpeg").then((data) => hook(data)),
+//     5000
+//   );
+// };
 
 function _urlContentToDataUri(url: string): Promise<string> {
   return fetch(url)
