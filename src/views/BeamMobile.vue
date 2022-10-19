@@ -7,7 +7,7 @@ import { useBeamSession } from "../features/useBeamSession";
 let webcam: any;
 const photo = ref("");
 const hideVideo = computed(() => photo.value !== "");
-const readyForSend = hideVideo;
+const readyForSend = computed(() => photo.value !== "" && !sending.value);
 
 const sending = ref(false);
 const route = useRoute();
@@ -30,16 +30,25 @@ const retake = () => {
   photo.value = "";
 };
 
+const wait = () =>
+  new Promise((resolve) => {
+    setTimeout(resolve, 300);
+  });
 const send = async () => {
   sending.value = true;
   try {
     await beamPhoto(photo.value);
   } finally {
+    await wait();
+
+    alert("something went wrong.. try again");
     sending.value = false;
   }
 
   retake();
 };
+
+const canvasClass = computed(() => (sending.value ? "opacity-half" : ""));
 </script>
 
 <template>
@@ -53,11 +62,18 @@ const send = async () => {
         width="640"
         height="480"
       ></video>
-      <canvas v-show="hideVideo" id="canvas" class="d-none"></canvas>
+      <canvas
+        v-show="hideVideo"
+        :class="canvasClass"
+        id="canvas"
+        class="d-none"
+      ></canvas>
     </div>
     <div class="footer">
       <button v-if="!hideVideo" @click="handleSnap">Take Photo!</button>
-      <button v-if="hideVideo" @click="retake">Retake!</button>
+      <button v-if="hideVideo" :disabled="sending" @click="retake">
+        Retake!
+      </button>
       <button v-if="readyForSend" @click="send">Send</button>
     </div>
   </div>
@@ -69,7 +85,12 @@ video {
   height: 100%;
 }
 
+.opacity-half {
+  opacity: 0.5;
+}
+
 .footer {
+  display: flex;
   height: 5em;
 }
 
@@ -87,5 +108,6 @@ video {
 button {
   min-width: 3rem;
   height: 100%;
+  flex-grow: 1;
 }
 </style>
