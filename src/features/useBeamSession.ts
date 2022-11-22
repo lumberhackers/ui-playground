@@ -49,6 +49,8 @@ export const useBeamSession = (
     photos.value = [...photos.value, photo];
   });
 
+  const beaming = ref(false);
+
   // Return the composable interface
   return {
     sessionId,
@@ -64,8 +66,13 @@ export const useBeamSession = (
       if (!isConnected.value) {
         throw new Error("not connected!");
       }
-
-      await PhotoHub.sendPhoto(photo);
+      try {
+        beaming.value = true;
+        await PhotoHub.sendPhoto(photo);
+      } finally {
+        beaming.value = false;
+      }
     },
+    beaming
   };
 };

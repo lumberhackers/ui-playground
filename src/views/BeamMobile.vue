@@ -1,114 +1,72 @@
 <script setup lang="ts">
-import { computed, onMounted, onUpdated, ref } from "vue";
+
+import { ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
-import Webcam from "webcam-easy";
+
 import { useBeamSession } from "../features/useBeamSession";
+import { usePhotoPicker } from "../features/usePhotoPicker";
 
-let webcam: any;
-const photo = ref("");
-const hideVideo = computed(() => photo.value !== "");
-const readyForSend = computed(() => photo.value !== "" && !sending.value);
-
-const sending = ref(false);
 const route = useRoute();
 
-const { beamPhoto } = useBeamSession("phone", route.params.id as any);
+const { beamPhoto, beaming } = useBeamSession("phone", route.params.id as any);
 
-onMounted(() => {
-  const webcamElement = document.getElementById("webcam");
-  const canvasElement = document.getElementById("canvas");
-  webcam = new Webcam(webcamElement, "user", canvasElement);
-  webcam.start();
-});
+const filePickerInputEl = ref();
+const { contents } = usePhotoPicker(filePickerInputEl);
 
-const handleSnap = () => {
-  const result = webcam.snap();
-  photo.value = result;
-};
+// Upload photo when we have one
+watchEffect(() => {
 
-const retake = () => {
-  photo.value = "";
-};
-
-const wait = () =>
-  new Promise((resolve) => {
-    setTimeout(resolve, 300);
-  });
-const send = async () => {
-  sending.value = true;
-  try {
-    await beamPhoto(photo.value);
-  } catch (e) {
-    alert(
-      "something went wrong.. try closing your tab and reloading before trying again"
-    );
-  } finally {
-    sending.value = false;
+  if (contents.value === null) {
+    return;
   }
 
-  retake();
-};
+  beamPhoto(contents.value)
+})
 
-const canvasClass = computed(() => (sending.value ? "opacity-half" : ""));
 </script>
 
 <template>
   <div class="container">
-    <div class="main">
-      <video
-        v-show="!hideVideo"
-        id="webcam"
-        autoplay
-        playsinline
-        width="640"
-        height="480"
-      ></video>
-      <canvas
-        v-show="hideVideo"
-        :class="canvasClass"
-        id="canvas"
-        class="d-none"
-      ></canvas>
-    </div>
-    <div class="footer">
-      <button v-if="!hideVideo" @click="handleSnap">Take Photo!</button>
-      <button v-if="hideVideo" :disabled="sending" @click="retake">
-        Retake!
-      </button>
-      <button v-if="readyForSend" @click="send">Send</button>
-    </div>
+
+    <template v-if="!beaming">
+
+      <label for="file-upload" class="custom-file-upload ">
+        Take Photo
+      </label>
+
+      <input id="file-upload" type="file" accept="image/*" capture="environment" ref="filePickerInputEl" />
+    </template>
+
   </div>
 </template>
 
 <style>
-video {
-  width: 100%;
-  height: 100%;
+body {
+  margin: 0;
 }
 
-.opacity-half {
-  opacity: 0.5;
+input[type="file"] {
+  display: none;
 }
 
-.footer {
+.custom-file-upload {
+  font-family: sans-serif;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 2px 2px gray;
+  display: inline-block;
+  cursor: pointer;
+  height: 10rem;
   display: flex;
-  height: 5em;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
+  height: 100%;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-.main {
-  background: #333;
-  flex: 1;
-}
-
-button {
-  min-width: 3rem;
-  height: 100%;
-  flex-grow: 1;
+  padding: 3rem;
 }
 </style>
